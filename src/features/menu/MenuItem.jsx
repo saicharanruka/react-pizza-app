@@ -1,9 +1,31 @@
 /* eslint-disable react/prop-types */
+import { useDispatch } from "react-redux";
 import Button from "../../ui/Button";
 import { formatCurrency } from "../../utils/helpers";
+import { addItem } from "../cart/cartSlice";
 
 function MenuItem({ pizza }) {
-  const { name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
+  const dispatch = useDispatch();
+  const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
+
+  // {
+  //   pizzaId: 12,
+  //   name: "Mediterranean",
+  //   quantity: 2,
+  //   unitPrice: 16,
+  //   totalPrice: 32,
+  // },
+
+  function handleAddToCart() {
+    const selectedPizza = {
+      pizzaId: id,
+      name,
+      quantity: 1,
+      unitPrice,
+      totalPrice: unitPrice,
+    };
+    dispatch(addItem(selectedPizza));
+  }
 
   return (
     <li className={`${soldOut && "cursor-not-allowed"} flex gap-4 py-2`}>
@@ -24,7 +46,7 @@ function MenuItem({ pizza }) {
             <p className="text-sm uppercase text-stone-500">Sold out</p>
           )}
 
-          {!soldOut && <Button>Add to cart</Button>}
+          {!soldOut && <Button onClick={handleAddToCart}>Add to cart</Button>}
         </div>
       </div>
     </li>
